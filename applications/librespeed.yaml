@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: librespeed
+  namespace: argocd
+spec:
+  project: workload
+  source:
+    repoURL: https://github.com/asdfgugus/K3s-ArgoCD-apps.git
+    targetRevision: HEAD
+    path: librespeed
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: librespeed
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

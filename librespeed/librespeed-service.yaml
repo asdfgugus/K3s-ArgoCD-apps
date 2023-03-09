@@ -1,0 +1,14 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: librespeed
+spec:
+  selector:
+    app: librespeed
+  ports:
+  - name: web
+    protocol: TCP
+    port: 80
+    targetPort: web
+  type: ClusterIP

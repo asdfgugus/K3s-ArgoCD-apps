@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: librespeed
+  labels:
+    app: librespeed
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: librespeed
+  template:
+    metadata:
+      labels:
+        app: librespeed
+    spec:
+      securityContext:
+      containers:
+      - name: librespeed
+        image: linuxserver/librespeed:latest
+        ports:
+          - containerPort: 80
+            name: web

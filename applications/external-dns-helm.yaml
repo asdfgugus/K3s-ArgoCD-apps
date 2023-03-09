@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns
+  namespace: argocd
+spec:
+  project: infra
+  source:
+    chart: external-dns
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    targetRevision: 1.12.1
+    helm:
+      releaseName: external-dns
+      values: |-
+        provider: pihole
+        sources: 
+        - ingress
+        policy: upsert-only
+        env:
+        - name: EXTERNAL_DNS_PIHOLE_SERVER
+          valueFrom:
+            secretKeyRef: 
+              name: pihole-config
+              key: EXTERNAL_DNS_PIHOLE_SERVER
+        - name: EXTERNAL_DNS_PIHOLE_PASSWORD
+          valueFrom:
+            secretKeyRef: 
+              name: pihole-config
+              key: EXTERNAL_DNS_PIHOLE_PASSWORD
+        extraArgs:
+        - "--pihole-server=$(EXTERNAL_DNS_PIHOLE_SERVER)"
+        - "--pihole-password=$(EXTERNAL_DNS_PIHOLE_PASSWORD)"
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: external-dns
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

@@ -1,0 +1,59 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nextcloud
+  namespace: argocd
+spec:
+  project: workload
+  source:
+    chart: nextcloud
+    repoURL: https://nextcloud.github.io/helm/
+    targetRevision: 3.5.1
+    helm:
+      releaseName: nextcloud
+      values: |-
+        image:
+          flavor: fpm
+        persistence:
+          enabled: true
+          storageClass: nfs-client
+        ingress:
+          enabled: true
+          className: nginx
+          annotations:
+            nginx.ingress.kubernetes.io/proxy-body-size: 1000m
+        service:
+          type: LoadBalancer
+          loadBalancerIP: "192.168.7.103"
+        nginx:
+          enabled: true
+        phpClientHttpsFix:
+          enabled: true
+        nextcloud:
+          host: nextcloud.k8s 
+          datadir: "/data"
+          extraVolumes:
+          - name: nfs
+            nfs:
+              server: 192.168.7.11
+              path: "/data/nextcloud"
+              readOnly: false
+          extraVolumeMounts:
+          - name: nfs
+            mountPath: "/data"
+        livenessProbe:
+          enabled: false
+        readinessProbe:
+          enabled: false
+        startupProbe:
+          enabled: false
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: nextcloud
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
