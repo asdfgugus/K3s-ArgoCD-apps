@@ -7,8 +7,8 @@ spec:
   project: workload
   source:
     repoURL: https://github.com/asdfgugus/K3s-ArgoCD-apps.git
-    targetRevision: HEAD
-    path: librespeed
+    targetRevision: develop
+    path: kustomize-apps/librespeed
   destination:
     server: "https://kubernetes.default.svc"
     namespace: librespeed
