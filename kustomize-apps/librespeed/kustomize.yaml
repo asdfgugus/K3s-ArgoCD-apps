@@ -1,0 +1,4 @@
+base:
+- deployment.yaml
+- ingress.yaml 
+- service.yaml
