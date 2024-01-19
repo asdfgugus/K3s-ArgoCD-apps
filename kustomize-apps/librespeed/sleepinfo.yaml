@@ -4,15 +4,6 @@ metadata:
   name: working-hours
 spec:
   weekdays: "1-5"
-  sleepAt: "20:00"
-  wakeUpAt: "08:00"
-  timeZone: "Europe/Zurich"
----
-apiVersion: kube-green.com/v1alpha1
-kind: SleepInfo
-metadata:
-  name: weekend
-spec:
-  weekdays: "6-7"
-  sleepAt: "00:00"
-  timeZone: "Europe/Zurich"
+  sleepAt: "21:00"
+  wakeUpAt: "07:00"
+  timeZone: "UTC"
