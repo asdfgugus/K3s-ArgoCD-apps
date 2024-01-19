@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus-opencost-exporter
+  namespace: argocd
+spec:
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: prometheus-opencost-exporter
+  project: infra
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+  source:
+    chart: prometheus-opencost-exporter
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: 0.1.1
+    helm:
+      releaseName: prometheus-opencost-exporter
+      values: |-
+        prometheus:
+          internal:
+            enabled: false
+            
+          
+
+
