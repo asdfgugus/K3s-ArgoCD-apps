@@ -1,22 +1,23 @@
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: librespeed
+  name: vmagent
   namespace: argocd
 spec:
-  project: workload
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: infra
   source:
+    path: umbrella-charts/vmagent
     repoURL: https://github.com/asdfgugus/K3s-ArgoCD-apps.git
     targetRevision: develop
-    path: kustomize/librespeed
-  destination:
-    server: "https://kubernetes.default.svc"
-    namespace: librespeed
   syncPolicy:
     automated:
       prune: true
       allowEmpty: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
-    - ServerSideApply=true
+      - CreateNamespace=true
+      - ServerSideApply=true

@@ -1,0 +1,31 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: kube-state-metrics
+  namespace: argocd
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: infra
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+  source:
+    chart: kube-state-metrics
+    repoURL: https://prometheus-community.github.io/helm-charts/
+    targetRevision: 5.18.0
+    helm:
+      version: v3
+      values: |-
+        service:
+          annotations:
+            prometheus.io/scrape: "true"

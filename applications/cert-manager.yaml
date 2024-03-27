@@ -15,6 +15,7 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+    - ServerSideApply=true
   source:
     chart: cert-manager
     repoURL: https://charts.jetstack.io
